@@ -17,6 +17,7 @@ public class BidBuffer {
 
     @RabbitListener(queues = "${rtb.routing-key}")
     public void receive(AdBid adBid){
+        System.out.println("received");
         openBids.computeIfAbsent(adBid.timeSlot(), _ -> new ArrayList<>()).add(adBid);
     }
 
