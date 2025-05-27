@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: impression-publisher
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+
+rtb:
+  exchange:
+    impressions: impression-requests-ex
+  queue:
+    impressions: impression-requests
+  routing:
+    impressions: impression-requests
