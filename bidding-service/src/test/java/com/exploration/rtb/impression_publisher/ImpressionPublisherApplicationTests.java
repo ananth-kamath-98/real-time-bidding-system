@@ -1,10 +1,10 @@
-package com.exploration.rtb;
+package com.exploration.rtb.impression_publisher;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BidApplicationTests {
+class ImpressionPublisherApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -2,16 +2,17 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-  data:
-    redis:
-      host: localhost
-      port: 6379
+
+  main:
+    web-application-type: None
+
 rtb:
   exchange:
     bids: bids-exchange
+    impressions: impression-exchange
+
   queue:
-    bids: bids
+    impressions: bidder-1-queue
+
   routing:
     bids: bids
-  auction:
-    delay-ms: 100

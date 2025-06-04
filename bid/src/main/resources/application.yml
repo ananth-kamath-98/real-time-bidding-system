@@ -1,8 +1,0 @@
-spring:
-  rabbitmq:
-    host: localhost
-    port: 5672
-
-rtb:
-  exchange: bids-exchange
-  routing-key: bids

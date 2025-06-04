@@ -1,6 +1,7 @@
-package com.exploration.rtb.config;
+package com.exploration.rtb.impression_publisher.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,21 +11,28 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableRabbit
 public class RabbitConfig {
+
     @Bean
-    public DirectExchange bidsExchange(@Value("${rtb.exchange.bids}") String name) {
-        return new DirectExchange(name);
+    public FanoutExchange impressionExchange(@Value("${rtb.exchange.impressions}") String name) {
+        return new FanoutExchange(name, true, false);
     }
 
     @Bean
-    public Queue bidsQueue(@Value("${rtb.queue.bids}") String name) {
-        return QueueBuilder.durable(name).build();
+    public Queue impressionsQueue(@Value("${rtb.queue.impressions}") String queueName) {
+        return new Queue(queueName, true, false, false);
     }
 
     @Bean
-    public Binding bidsBinding(Queue bidsQueue, DirectExchange bidsExchange,
-                               @Value("${rtb.routing.bids}") String routingKey) {
-        return BindingBuilder.bind(bidsQueue).to(bidsExchange).with(routingKey);
+    public Binding impressionsBinding(Queue impressionsQueue, FanoutExchange impressionExchange) {
+        return BindingBuilder.bind(impressionsQueue).to(impressionExchange);
+    }
+
+    @Bean
+    public DirectExchange bidsExchange(
+            @Value("${rtb.exchange.bids}") String bidsExchange) {
+        return new DirectExchange(bidsExchange, true, false);
     }
 
     @Bean
@@ -43,8 +51,9 @@ public class RabbitConfig {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
-                                         Jackson2JsonMessageConverter converter) {
+    public RabbitTemplate rabbitTemplate(
+            ConnectionFactory connectionFactory,
+            Jackson2JsonMessageConverter converter) {
         var template = new RabbitTemplate(connectionFactory);
         template.setMessageConverter(converter);
         return template;

@@ -16,21 +16,19 @@ public class ImpressionController {
 
     private final RabbitTemplate rabbitTemplate;
     private final String exchange;
-    private final String routingKey;
 
     public ImpressionController(
             RabbitTemplate rabbitTemplate,
-            @Value("${rtb.exchange.impressions}") String exchange,
-            @Value("${rtb.routing.impressions}") String routingKey
+            @Value("${rtb.exchange.impressions}") String exchange
     ) {
         this.rabbitTemplate = rabbitTemplate;
         this.exchange = exchange;
-        this.routingKey = routingKey;
     }
 
     @PostMapping
     public ResponseEntity<Void> newImpression(@RequestBody @Valid ImpressionRequest req) {
-        rabbitTemplate.convertAndSend(exchange, routingKey, req);
+        System.out.println("Sending impression request: " + req);
+        rabbitTemplate.convertAndSend(exchange, "", req);
         return ResponseEntity.accepted().build();
     }
 }

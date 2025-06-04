@@ -1,6 +1,6 @@
 package com.exploration.rtb.config;
 
-import com.exploration.rtb.dto.WinnerAdBid;
+import com.exploration.rtb.dto.AdBid;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -12,18 +12,17 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate<String, WinnerAdBid> redisTemplate(RedisConnectionFactory factory) {
-        var redisTemplate = new RedisTemplate<String, WinnerAdBid>();
-        redisTemplate.setConnectionFactory(factory);
+    public RedisTemplate<String, AdBid> configureRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        var redisTemplate = new RedisTemplate<String, AdBid>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 
-        var valueSerializer =
-                new Jackson2JsonRedisSerializer<>(WinnerAdBid.class);
-
+        var valueSerializer = new Jackson2JsonRedisSerializer<>(AdBid.class);
         redisTemplate.setValueSerializer(valueSerializer);
         redisTemplate.setHashValueSerializer(valueSerializer);
+
 
         return redisTemplate;
     }

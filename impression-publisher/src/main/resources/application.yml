@@ -8,8 +8,4 @@ spring:
 
 rtb:
   exchange:
-    impressions: impression-requests-ex
-  queue:
-    impressions: impression-requests
-  routing:
-    impressions: impression-requests
+    impressions: impression-exchange

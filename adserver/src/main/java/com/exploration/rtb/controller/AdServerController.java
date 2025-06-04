@@ -21,12 +21,13 @@ public class AdServerController {
     }
 
     @GetMapping
-    public ResponseEntity<WinnerAdBid> getWinningAd(@RequestParam String timeSlot) {
-        Boolean exists = redisTemplate.opsForHash().hasKey("winners", timeSlot);
-        if (!Boolean.TRUE.equals(exists)) {
-          return ResponseEntity.notFound().build();
+    public ResponseEntity<WinnerAdBid> getWinningAd(@RequestParam String impressionId) {
+        var key = impressionId + " winner";
+        var winner = redisTemplate.opsForValue().get(key);
+        if (winner == null) {
+            return ResponseEntity.notFound().build();
         }
-        WinnerAdBid winner = (WinnerAdBid) redisTemplate.opsForHash().get("winners", timeSlot);
+
         return ResponseEntity.ok(winner);
     }
 }
