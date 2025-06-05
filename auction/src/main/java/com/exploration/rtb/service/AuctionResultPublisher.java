@@ -14,7 +14,7 @@ public class AuctionResultPublisher {
     }
 
     public void publishResult(String impressionId, AdBid winner) {
-        System.out.println("winner: " + winner.impressionId());
+        System.out.println("winning bid: " + winner.bidAmount());
         ops.set(impressionId + " winner", winner);
     }
 }

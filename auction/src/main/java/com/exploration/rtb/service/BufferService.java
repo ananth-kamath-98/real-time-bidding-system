@@ -19,13 +19,14 @@ public class BufferService {
     private final AuctionResultPublisher resultPublisher;
 
     public BufferService(@Value("${rtb.auction.delay-ms}") long auctionDelayMs,
-                               AuctionResultPublisher resultPublisher) {
+                         AuctionResultPublisher resultPublisher) {
         this.auctionDelayMs = auctionDelayMs;
         this.resultPublisher = resultPublisher;
     }
 
     @RabbitListener(queues = "${rtb.queue.bids}")
     public void receiveBid(AdBid bid) {
+        System.out.println("Received Bid for impressionId: " + bid.impressionId() + "; Amount: " + bid.bidAmount());
         bidBuffers.computeIfAbsent(bid.impressionId(), id -> {
             scheduleAuction(id);
             return new CopyOnWriteArrayList<>();
